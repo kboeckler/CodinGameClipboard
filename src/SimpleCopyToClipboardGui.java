@@ -76,10 +76,10 @@ public class SimpleCopyToClipboardGui {
       public void componentMoved(ComponentEvent e) {
       }
 
-      @Override
-      public void componentHidden(ComponentEvent e) {
-      }
-    });
+    @Override
+    public void componentHidden(ComponentEvent e) {
+    }
+  });
   }
 
   private void createFrame() {
@@ -103,7 +103,7 @@ public class SimpleCopyToClipboardGui {
     topComponent = new JTextField();
     topComponent.setText(".");
     middleComponent = new JTextArea();
-    middleComponent.setText("import java.util.*;\nimport java.io.*;\nimport java.math.*;");
+    middleComponent.setText("import java.util.*;\nimport java.io.*;\nimport java.math.*;\nimport java.util.stream.*;\nimport java.util.function.*;");
     middleBottomPanel = new JPanel();
     minifyCheckbox = new JCheckBox();
     packageCheckbox = new JCheckBox();

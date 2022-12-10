@@ -1,5 +1,8 @@
 package com.github.kboeckler.codingameclipboard;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public class Args {
 
   private final String sourceFolder;
@@ -13,6 +16,7 @@ public class Args {
     if (input.length == 0) {
       throw new IllegalArgumentException("Not enough arguments");
     }
+    String specifiedImports = SimpleCopyToClipboardGui.DEFAULT_IMPORTS;
     boolean minify = false;
     boolean removePackage = true;
     boolean copyToClipboard = false;
@@ -24,6 +28,8 @@ public class Args {
           removePackage = false;
         } else if (part.equals("-c")) {
           copyToClipboard = true;
+        } else if (part.startsWith("-i=")) {
+          specifiedImports = importPackagesToImportStatements(part.replaceFirst("-i=", ""));
         }
       } else {
         if (src != null) {
@@ -33,10 +39,17 @@ public class Args {
       }
     }
     sourceFolder = src;
-    imports = SimpleCopyToClipboardGui.DEFAULT_IMPORTS;
+    imports = specifiedImports;
     shallMinify = minify;
     shallRemovePackageDeclarations = removePackage;
     shallCopyToClipboard = copyToClipboard;
+  }
+
+  private String importPackagesToImportStatements(String packages) {
+    String[] singlePackages = packages.split(";");
+    return Arrays.stream(singlePackages)
+        .map(p -> "import " + p + ";")
+        .collect(Collectors.joining("\n"));
   }
 
   public String getSourceFolder() {

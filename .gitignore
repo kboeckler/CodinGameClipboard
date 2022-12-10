@@ -4,5 +4,6 @@ bin/
 .project
 .idea/
 classes/
+build/
 *.iml
 .gradle/

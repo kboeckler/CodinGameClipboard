@@ -1,10 +1,12 @@
+package com.github.kboeckler.codingameclipboard;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileFinder {
 
-	private File sourceFolder;
+	private final File sourceFolder;
 
 	public FileFinder(File sourceFolder) {
 		this.sourceFolder = sourceFolder;

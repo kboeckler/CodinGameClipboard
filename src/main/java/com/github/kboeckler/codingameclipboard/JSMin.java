@@ -1,4 +1,4 @@
-/**
+package com.github.kboeckler.codingameclipboard; /**
  * License Agreement.
  *
  * Ajax4jsf 1.1 - Natural Ajax for Java Server Faces (JSF)

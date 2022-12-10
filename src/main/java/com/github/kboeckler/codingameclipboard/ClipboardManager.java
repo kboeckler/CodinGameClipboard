@@ -1,23 +1,21 @@
+package com.github.kboeckler.codingameclipboard;
+
 import java.io.File;
 import java.util.List;
 
 public class ClipboardManager {
 
-  public static void main(String[] args) {
-    new ClipboardManager();
-  }
-
   private FileFinder finder;
   private String imports;
   private boolean shallMinify;
   private boolean shallRemovePackage;
-  private ClipboardWriter clipboardWriter;
-  private MinifyService minifier;
 
-  public ClipboardManager() {
-    clipboardWriter = new ClipboardWriter();
-    minifier = new MinifyService();
-    new SimpleCopyToClipboardGui(this);
+  private final OutputWriter outputWriter;
+  private final MinifyService minifier;
+
+  public ClipboardManager(OutputWriter outputWriter, MinifyService minifier) {
+    this.outputWriter = outputWriter;
+    this.minifier = minifier;
   }
 
   boolean setSourceFolder(String sourceFolder) {
@@ -49,29 +47,26 @@ public class ClipboardManager {
   }
 
   private List<File> readFiles() {
-    List<File> files = finder.findSourceFiles();
-    return files;
+    return finder.findSourceFiles();
   }
 
   private String mergeTextFromFiles(List<File> files) {
     TextMerger merger = new TextMerger();
-    merger.addImportText(imports);
     for (File f : files) {
       String[] ignoreRowsBeginningWith = getIgnoreRows();
       FullFileReader reader = new FullFileReader(f, ignoreRowsBeginningWith);
-      merger.addText(reader.readFullText(), f.getName());
+      reader.read();
+      merger.addFileText(reader.getFullText(), f.getName());
     }
+    merger.setImportText(imports);
     return merger.getMergedText();
   }
 
   private String[] getIgnoreRows() {
     if (shallRemovePackage) {
-      return new String[] {
-          "package ",
-          "import " };
+      return new String[] {"package ", "import "};
     }
-    return new String[] {
-        "import " };
+    return new String[] {"import "};
   }
 
   private String minifyTextIfWished(String sourceText) {
@@ -82,7 +77,6 @@ public class ClipboardManager {
   }
 
   private void copyTextToClipboard(String mergedText) {
-    clipboardWriter.copyToClipboard(mergedText);
+    outputWriter.printOutput(mergedText);
   }
-
 }
